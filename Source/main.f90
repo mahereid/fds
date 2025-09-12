@@ -714,7 +714,7 @@ MAIN_LOOP: DO
 
       ! Solve for the pressure at the current time step
 
-      IF (LEVEL_SET_MODE/=1 .AND. SOLVE_PREDICTOR_PRESSURE) CALL PRESSURE_ITERATION_SCHEME
+      IF (LEVEL_SET_MODE/=1 .AND. (ICYC == 1 .OR. SOLVE_PREDICTOR_PRESSURE)) CALL PRESSURE_ITERATION_SCHEME
 
       ! Predict the velocity components at the next time step
 

@@ -26,6 +26,7 @@ TYPE MESH_TYPE
    REAL(EB), ALLOCATABLE, DIMENSION(:,:,:) :: DS      !< Divergence estimate next time step, \f$D_{ijk}^*\f$
    REAL(EB), ALLOCATABLE, DIMENSION(:,:,:) :: H       !< \f$ \tilde{p}_{ijk}/\rho_{ijk} + |\mathbf{u}|^2_{ijk}/2 \f$
    REAL(EB), ALLOCATABLE, DIMENSION(:,:,:) :: HS      !< H estimated at next time step
+   REAL(EB), ALLOCATABLE, DIMENSION(:,:,:) :: HNP1    !< Average H between predictor and corrector steps
    REAL(EB), ALLOCATABLE, DIMENSION(:,:,:) :: KRES    !< Resolved kinetic energy, \f$ |\mathbf{u}|^2_{ijk}/2 \f$
    REAL(EB), ALLOCATABLE, DIMENSION(:,:,:) :: FVX     !< Momentum equation flux terms, \f$ F_{{\rm A},x,ijk}+F_{{\rm B},x,ijk} \f$
    REAL(EB), ALLOCATABLE, DIMENSION(:,:,:) :: FVY     !< Momentum equation flux terms, \f$ F_{{\rm A},y,ijk}+F_{{\rm B},y,ijk} \f$
@@ -353,7 +354,7 @@ USE MESH_VARIABLES
 IMPLICIT NONE (TYPE,EXTERNAL)
 
 REAL(EB), POINTER, DIMENSION(:,:,:) :: &
-   U,V,W,US,VS,WS,DDDT,D,DS,H,HS,KRES,FVX,FVY,FVZ,FVX_B,FVY_B,FVZ_B,FVX_D,FVY_D,FVZ_D,RHO,RHOS, &
+   U,V,W,US,VS,WS,DDDT,D,DS,H,HS,HNP1,KRES,FVX,FVY,FVZ,FVX_B,FVY_B,FVZ_B,FVX_D,FVY_D,FVZ_D,RHO,RHOS, &
    MU,MU_DNS,TMP,Q,KAPPA_GAS,CHI_R,QR,QR_W,RADIATION_EMISSION,RADIATION_ABSORPTION,UII,RSUM,D_SOURCE, &
    CSD2,MTR,MSR,WEM,MIX_TIME,CHEM_SUBIT,STRAIN_RATE,D_Z_MAX,PP_RESIDUAL,LES_FILTER_WIDTH,BFX,BFY,BFZ
 REAL(EB), POINTER, DIMENSION(:,:,:,:) :: ZZ,ZZS,REAC_SOURCE_TERM,DEL_RHO_D_DEL_Z,FX,FY,FZ, &
@@ -505,6 +506,7 @@ D=>M%D
 DS=>M%DS
 H=>M%H
 HS=>M%HS
+HNP1=>M%HNP1
 KRES=>M%KRES
 FVX=>M%FVX
 FVY=>M%FVY

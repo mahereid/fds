@@ -610,6 +610,13 @@ MAIN_LOOP: DO
    PREDICTOR = .TRUE.
    CORRECTOR = .FALSE.
 
+   IF ((.NOT.SOLVE_PREDICTOR_PRESSURE) .AND. (ICYC>1)) THEN
+      DO NM=LOWER_MESH_INDEX,UPPER_MESH_INDEX
+         M=>MESHES(NM)
+         M%H=M%HNP1
+      ENDDO
+   ENDIF
+
    ! Process externally controlled variables
 
    IF (READ_EXTERNAL) THEN
@@ -968,6 +975,11 @@ MAIN_LOOP: DO
       CALL VELOCITY_BC(T,NM,APPLY_TO_ESTIMATED_VARIABLES=.FALSE.)
       CALL UPDATE_GLOBAL_OUTPUTS(T,DT,NM)
    ENDDO VELOCITY_BC_LOOP_2
+
+   DO NM=LOWER_MESH_INDEX,UPPER_MESH_INDEX
+      M=>MESHES(NM)
+      M%HNP1 = 0.5_EB*(M%H + M%HS)
+   ENDDO
 
    ! Share device, HRR, mass data among all processes
 

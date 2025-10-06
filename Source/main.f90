@@ -611,6 +611,14 @@ MAIN_LOOP: DO
    PREDICTOR = .TRUE.
    CORRECTOR = .FALSE.
 
+   ! Approximate predictor pressure if not solving for it
+   IF ((.NOT.SOLVE_PREDICTOR_PRESSURE) .AND. (ICYC>1)) THEN
+      DO NM=LOWER_MESH_INDEX,UPPER_MESH_INDEX
+         M=>MESHES(NM)
+         M%H=0.5*(M%H + M%HS)
+      ENDDO
+   ENDIF
+
    ! Process externally controlled variables
 
    IF (READ_EXTERNAL) THEN
@@ -715,8 +723,18 @@ MAIN_LOOP: DO
 
       ! Solve for the pressure at the current time step
 
-      IF (LEVEL_SET_MODE/=1) CALL PRESSURE_ITERATION_SCHEME
-
+      IF (LEVEL_SET_MODE/=1 .AND. (ICYC == 1 .OR. SOLVE_PREDICTOR_PRESSURE)) THEN 
+         CALL PRESSURE_ITERATION_SCHEME
+      ELSE
+         DO NM=LOWER_MESH_INDEX,UPPER_MESH_INDEX
+            CALL BAROCLINIC_CORRECTION(T,NM)
+            CALL MESH_EXCHANGE(5)  ! Exchange FVX, FVY, FVZ
+            CALL MATCH_VELOCITY_FLUX(NM)
+            CALL NO_FLUX(DT,NM)
+            MESHES(NM)%WALL_WORK1 = 0._EB
+         ENDDO
+      ENDIF
+      
       ! Predict the velocity components at the next time step
 
       CHANGE_TIME_STEP_INDEX = 0

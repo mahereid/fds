@@ -228,7 +228,7 @@ LOGICAL :: THERMOPHORETIC_SETTLING=.TRUE.   !< Allow aerosol thermophoretic sett
 LOGICAL :: TURBULENT_DEPOSITION=.TRUE.      !< Allow aerosol turbulent deposition
 LOGICAL :: DEPOSITION=.TRUE.                !< Allow aerosol deposition
 LOGICAL :: AEROSOL_SCRUBBING=.FALSE.        !< Allow aerosol scrubbing
-LOGICAL :: VELOCITY_ERROR_FILE=.FALSE.      !< Generate a diagnostic output file listing velocity and pressure errors
+LOGICAL :: VELOCITY_ERROR_FILE=.TRUE.       !< Generate a diagnostic output file listing velocity and pressure errors
 LOGICAL :: CFL_FILE=.FALSE.                 !< Generate a diagnostic output file listing quantities related to CFL and VN
 LOGICAL :: CONSTANT_SPECIFIC_HEAT_RATIO=.FALSE. !< Assume that the ratio of specific heats is constant, \f$ \gamma=1.4 \f$
 LOGICAL :: CHECK_HT=.FALSE.                 !< Apply heat transfer stability condition

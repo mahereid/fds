@@ -615,7 +615,7 @@ MAIN_LOOP: DO
    IF ((.NOT.SOLVE_PREDICTOR_PRESSURE) .AND. (ICYC>1)) THEN
       DO NM=LOWER_MESH_INDEX,UPPER_MESH_INDEX
          M=>MESHES(NM)
-         M%H=0.5*(M%H + M%HS)
+         M%H=0.5_EB*(M%H + M%HS)
       ENDDO
    ENDIF
 

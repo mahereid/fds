@@ -7447,11 +7447,11 @@ IND_SELECT: SELECT CASE(IND)
                            + (V(II,JJ,KK) - V(II,JJ-1,KK))*RDY(JJ) &
                            + (W(II,JJ,KK) - W(II,JJ,KK-1))*RDZ(KK)
    CASE(15)  ! DIVERGENCE
-      GAS_PHASE_OUTPUT_RES = D(II,JJ,KK)
-   CASE(16)  ! DIVERGENCE
       GAS_PHASE_OUTPUT_RES = (US(II,JJ,KK) - US(II-1,JJ,KK))*RDX(II) &
                            + (VS(II,JJ,KK) - VS(II,JJ-1,KK))*RDY(JJ) &
                            + (WS(II,JJ,KK) - WS(II,JJ,KK-1))*RDZ(KK)
+   CASE(16)  ! DIVERGENCE
+      GAS_PHASE_OUTPUT_RES = D(II,JJ,KK)
    CASE(17)  ! DIVERGENCE
       GAS_PHASE_OUTPUT_RES = DS(II,JJ,KK)
    ! CASE(15)  ! MIXING TIME

@@ -66,9 +66,15 @@ CALL POINT_TO_MESH(NM)
 ! PREDICTOR stage of the current time step and used in the advection of the energy/species in the CORRECTOR stage.
 
 IF (PREDICTOR) THEN
-   UU => US
-   VV => VS
-   WW => WS
+   IF (SOLVE_PREDICTOR_PRESSURE) THEN
+      UU => US
+      VV => VS
+      WW => WS
+   ELSE
+      UU => U
+      VV => V
+      WW => W
+   ENDIF
    RHOP => RHOS
    ZZP  => ZZS
    PBAR_P => PBAR_S

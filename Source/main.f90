@@ -612,10 +612,10 @@ MAIN_LOOP: DO
    CORRECTOR = .FALSE.
 
    ! Approximate predictor pressure if not solving for it
-   IF ((.NOT.SOLVE_PREDICTOR_PRESSURE) .AND. (ICYC>1)) THEN
+   IF ((.NOT.SOLVE_PREDICTOR_PRESSURE) .AND. (ICYC>2)) THEN
       DO NM=LOWER_MESH_INDEX,UPPER_MESH_INDEX
          M=>MESHES(NM)
-         M%H=0.5_EB*(M%H + M%HS)
+         M%H=0.5_EB*(3_EB*M%HN - M%HNM1)
       ENDDO
    ENDIF
 
@@ -723,7 +723,7 @@ MAIN_LOOP: DO
 
       ! Solve for the pressure at the current time step
 
-      IF (LEVEL_SET_MODE/=1 .AND. (ICYC == 1 .OR. SOLVE_PREDICTOR_PRESSURE)) THEN 
+      IF (LEVEL_SET_MODE/=1 .AND. (ICYC<3 .OR. SOLVE_PREDICTOR_PRESSURE)) THEN 
          CALL PRESSURE_ITERATION_SCHEME
       ELSE
          DO NM=LOWER_MESH_INDEX,UPPER_MESH_INDEX
@@ -952,6 +952,12 @@ MAIN_LOOP: DO
    ! Solve the pressure equation.
 
    IF (LEVEL_SET_MODE/=1) CALL PRESSURE_ITERATION_SCHEME
+
+   DO NM=LOWER_MESH_INDEX,UPPER_MESH_INDEX
+      M=>MESHES(NM)
+      M%HNM1 = M%HN
+      M%HN   = 0.5_EB*(M%H + M%HS)
+   ENDDO
 
    ! Update the  velocity.
 
